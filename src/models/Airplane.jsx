@@ -12,6 +12,23 @@ const Airplane = ({ isMoving, setIsMoving, ...props }) => {
   // useEffect(() => {
   //   actions["Animation"].play();
   // });
+  const adjustAirplaneForScreenSize = () => {
+    let screenScale = null;
+    let screenPosition = null;
+    let rotation = [0, -1.6, 0];
+
+    if (window.innerWidth < 768) {
+      screenScale = [0.2, 0.2, 0.2];
+      screenPosition = [-1.5, -0.5, 0];
+    } else {
+      screenScale = [10, 10, 10];
+      screenPosition = [-250, 0, 0];
+    }
+    return [screenScale, screenPosition, rotation];
+  };
+
+  const [airPlaneScale, airPlanePosition, rotation] =
+    adjustAirplaneForScreenSize();
 
   const keyMap = useKeyboard();
   useFrame((_, delta) => {
@@ -23,7 +40,12 @@ const Airplane = ({ isMoving, setIsMoving, ...props }) => {
 
   return (
     <mesh ref={ref}>
-      <primitive object={scene} {...props} />
+      <primitive
+        object={scene}
+        scale={airPlaneScale}
+        position={airPlanePosition}
+        rotation={rotation}
+      />
     </mesh>
   );
 };

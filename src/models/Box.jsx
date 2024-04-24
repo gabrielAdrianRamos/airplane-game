@@ -1,21 +1,17 @@
 import { useFrame } from "@react-three/fiber";
 import React, { useRef } from "react";
 
-const Box = (props) => {
+const Box = ({ position }) => {
   const boxRef = useRef();
 
-  const minm = -200;
-  const maxm = 200;
-  const randomPosY = Math.floor(Math.random() * (maxm - minm + 1)) + minm;
-  const posY = randomPosY;
-
   useFrame((_, delta) => {
-    boxRef.current.position.x -= 30 * delta;
+    const animationId = () => (boxRef.current.position.x -= 30 * delta);
+    return animationId();
   });
 
   return (
-    <mesh ref={boxRef} {...props} position={[400, posY, 0]}>
-      <boxGeometry scale={props} />
+    <mesh ref={boxRef} position={position}>
+      <boxGeometry args={[20, 20, 0]} />
       <meshStandardMaterial color={"red"} />
     </mesh>
   );
