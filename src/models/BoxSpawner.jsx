@@ -2,7 +2,7 @@ import { useFrame } from "@react-three/fiber";
 import React, { useRef, useState } from "react";
 import Box from "./Box";
 
-const BoxSpawner = () => {
+const BoxSpawner = (props) => {
   const [spawnRate, setSpawnRate] = useState(250);
   const frames = useRef(0);
   const [enemies, setEnemies] = useState([]);
@@ -23,6 +23,7 @@ const BoxSpawner = () => {
           key={frames.current}
           position={[(Math.random() - -20) * 20, posY, 0]}
           color="red"
+          args={props.args}
         />
       );
 

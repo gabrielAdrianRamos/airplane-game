@@ -1,7 +1,7 @@
 import { useFrame } from "@react-three/fiber";
 import React, { useRef } from "react";
 
-const Box = ({ position }) => {
+const Box = ({ position, args }) => {
   const boxRef = useRef();
 
   useFrame((_, delta) => {
@@ -11,7 +11,7 @@ const Box = ({ position }) => {
 
   return (
     <mesh ref={boxRef} position={position}>
-      <boxGeometry args={[20, 20, 0]} />
+      <boxGeometry args={args} />
       <meshStandardMaterial color={"red"} />
     </mesh>
   );
