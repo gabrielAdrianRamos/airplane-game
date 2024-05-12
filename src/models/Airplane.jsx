@@ -1,30 +1,27 @@
 import { useGLTF } from "@react-three/drei";
-import useKeyboard from "../hooks/useKeyboard";
-
-import { useRef } from "react";
-import { useFrame } from "@react-three/fiber";
+import { RigidBody } from "@react-three/rapier";
 
 const Airplane = (props) => {
-  const { scene, animations } = useGLTF("/animatedairplane.glb");
-  const ref = useRef();
-
-  const keyMap = useKeyboard();
-  useFrame((_, delta) => {
-    keyMap["KeyA"] && (ref.current.position.x -= 50 * delta);
-    keyMap["KeyD"] && (ref.current.position.x += 50 * delta);
-    keyMap["KeyS"] && (ref.current.position.y -= 50 * delta);
-    keyMap["KeyW"] && (ref.current.position.y += 50 * delta);
-  });
+  const { scene } = useGLTF("/animatedairplane.glb");
 
   return (
-    <mesh ref={ref}>
-      <primitive
-        object={scene}
-        scale={props.scale}
-        position={props.position}
-        rotation={props.rotation}
-      />
-    </mesh>
+    <RigidBody
+      sensor
+      colliders={"ball"}
+      onCollisionEnter={() => console.log("entering")}
+    >
+      <mesh ref={props.innerRef}>
+        {/* <primitive
+          object={scene}
+          scale={props.scale}
+          position={props.position}
+          rotation={props.rotation}
+          ref={props.innerRef}
+        /> */}
+        <boxGeometry args={[20, 20, 0]} position={[-250, 0, 0]} />
+        <meshStandardMaterial color={"blue"} />
+      </mesh>
+    </RigidBody>
   );
 };
 

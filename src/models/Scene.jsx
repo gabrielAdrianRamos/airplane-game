@@ -1,6 +1,9 @@
 import React, { useRef } from "react";
 import Airplane from "./Airplane";
 import BoxSpawner from "./BoxSpawner";
+import Box from "./Box";
+import { useKeyboardControls } from "@react-three/drei";
+import { Controls } from "../App";
 import { useFrame } from "@react-three/fiber";
 
 const Scene = () => {
@@ -25,16 +28,33 @@ const Scene = () => {
   const [airPlaneScale, airPlanePosition, rotation] =
     adjustAirplaneForScreenSize();
 
+  const leftPressed = useKeyboardControls((state) => state[Controls.left]);
+  const rightPressed = useKeyboardControls((state) => state[Controls.right]);
+  const backPressed = useKeyboardControls((state) => state[Controls.back]);
+  const forwardPressed = useKeyboardControls(
+    (state) => state[Controls.forward]
+  );
+
+  useFrame((_state, delta) => {
+    leftPressed && (planeRef.current.position.x -= 50 * delta);
+    rightPressed && (planeRef.current.position.x += 50 * delta);
+    forwardPressed && (planeRef.current.position.y += 50 * delta);
+    backPressed && (planeRef.current.position.y -= 50 * delta);
+
+    boxRef.current.position.x -= 30 * delta;
+  });
+
   return (
-    <mesh>
+    <>
       <Airplane
-        ref={planeRef}
+        innerRef={planeRef}
         scale={airPlaneScale}
         position={airPlanePosition}
         rotation={rotation}
       />
-      <BoxSpawner ref={boxRef} args={[20, 20, 0]} />
-    </mesh>
+      {/* <BoxSpawner args={[20, 20, 0]} /> */}
+      <Box innerRef={boxRef} />
+    </>
   );
 };
 
